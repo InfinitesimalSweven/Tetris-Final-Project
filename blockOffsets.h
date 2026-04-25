@@ -1,0 +1,9 @@
+#ifndef BLOCKOFFSETS_H
+#define BLOCKOFFSETS_H
+
+#define BLOCKTYPES 7
+#define BLOCKCORDS 4
+#define CORDS 2
+#define ROTATIONS 4
+
+int spawnPos[BLOCKTYPES][BLOCKCORDS][CORDS];

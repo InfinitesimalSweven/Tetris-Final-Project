@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define ROWS 20
+#define ROWS 40
 #define COLS 10
 
 
@@ -18,3 +18,5 @@ Board createBoard(int score, int level){
     Board tetrisBoard = {.score = score, .level = level};
     return tetrisBoard;
 }
+
+void clearLine(){}
