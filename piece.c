@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "blockOffsets.h"
+#include "board.h"
 
 typedef enum {
     EMPTY, LIGHT_BLUE, DARK_BLUE, ORANGE, YELLOW, GREEN, RED, MAGENTA
@@ -26,14 +27,61 @@ Piece createPiece(BlockType letter, ColorType color){
     return tetrisBlock;
 }
 
-//void rotatePiece(){}
+bool checkCollision(Piece TetrisBlock, int dx, int dy, Board* Board) {
+    for (int i = 0; i < 4; i++) {
+        TetrisBlock.blockCords[i][0] += dx;
+        TetrisBlock.blockCords[i][1] += dy;
 
-void translatePieceDown(){}
+        if (TetrisBlock.blockCords[i][0] >= 10 ||
+            TetrisBlock.blockCords[i][1] >= 40){
+                return true;
+        }
 
-void translatePieceRight(){}
 
-void translatePieceLeft(){}
+        if (TetrisBlock.blockCords[i][0] < 0 ||
+            TetrisBlock.blockCords[i][1] < 0){
+                return true;
+        }
 
-void hardDropPiece(){}
+        if (Board->grid[TetrisBlock.blockCords[i][1]][TetrisBlock.blockCords[i][0]] > 0){
+                return true;
+            }
+        }
+    return false;
+}
+
+
+void translatePiece(Piece* tetrisBlock, int dx, int dy) {
+    for (int i = 0; i < 4; i++) {
+        TetrisBlock->blockCords[i][0] += dx;
+        TetrisBlock->blockCords[i][1] += dy;
+    }
+}
+
+void transCollision(Piece* TetrisBlock, int dx, int dy, Board* Board){
+
+    if (!checkCollision(*TetrisBlock, dx, dy, Board))
+        translatePiece(TetrisBlock, dx, dy);
+
+}
+
+void rotCollision(Piece* TetrisBlock, int dx, int dy, Board* Board){
+
+}
+
+
+//I want to implement a binary search tree becuase its technically more efficient but
+//its ok readable code is more important methinks, maybe ill comment a binTree version
+//and ask kyle what he thinks
+
+#define collisionInusrance
+int hardDropPiece(Piece* TetrisBlock, Board* Board){
+
+    for(int i = 0; i < 25; i++){
+        checkCollision(TetrisBlock, 0, -i, Board);
+    }
+
+    return i;
+}
 
 
