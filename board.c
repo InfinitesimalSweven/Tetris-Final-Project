@@ -37,3 +37,18 @@ void drawBoard(SDL_Renderer *renderer, Board* TetrisBoard) {
         }
     }
 }
+
+
+void checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
+    int yDelta = yHigh-yLow;
+    int isFull;
+    for (int y = yHigh; y >= yLow; y--){
+        isFull = 1;
+        for (int x = 0; x < 10; x++){
+            if (TetrisBoard->grid[x][y] > 0){
+                isFull = 0;
+            }
+        }
+
+    }
+} //TODO: Finish this clearLine Function
