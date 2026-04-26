@@ -1,100 +1,131 @@
 #include <stdio.h>
 #include "blockOffsets.h"
 #include "board.h"
+#include "piece.h"
+#define CELL 32
 
 
-typedef enum {
-    EMPTY, I_BLOCK, J_BLOCK, L_BLOCK, O_BLOCK, S_BLOCK, Z_BLOCK, T_BLOCK
-} BlockType;
+
 //These enumerations both corrospond with each other, so each block type has their correct color type.
 //Seperated the enumerations just in case block colors wanted to be changed in the future.
 
-
-typedef struct {
-    int blockCords[4][2]; //Origin cord defined at [0][2]
-    int rotation; //Rotation states-> 0 origin, 1 is 90 degrees, 2 is 180 degrees, and 3 is 270 degrees 
-    BlockType blockType;
-} Piece
+const Color PieceColors[8] = {
+    {0,   0  , 0  }, // EMPTY
+    {0,   255, 255}, // I - light_blue
+    {0,   0,   255}, // J - dark_blue
+    {255, 165, 0  }, // L - orange
+    {255, 255, 0  }, // O - yellow
+    {0,   255, 0  }, // S - green
+    {255, 0,   0  }, // Z - red
+    {128, 0,   128}, // T - magenta
+};
 
 //spawns piece at appropriate location. (We choose coordinate system (0,0) as top-left)
 //We use a 40x10 board. Why? Idk the tetris requirements told me to. We really only need 10x24...
 Piece createPiece(BlockType blockType){
-    Piece tetrisBlock = {.rotation = 0, .blockType = blockType}
-    memcpy(tetrisBlock.blockCords, spawnPos[letter], sizeof(tetrisBlock.blockCords));
-    return tetrisBlock;
+    Piece TetrisBlock = {.oriCol = spawnPos[blockType][0], .oriRow = spawnPos[blockType][1], .rotation = 0, .blockType = blockType};
+    return TetrisBlock;
 }
 
-int checkCollision(Piece TetrisBlock, int dx, int dy, Board* Board) {
+int checkCollision(Piece* TetrisBlock, Board* Board, int dx, int dy, int drot) {
+
+    int col = TetrisBlock->oriCol + dx;
+    int row = TetrisBlock->oriRow + dy;
+    int rot = (TetrisBlock->rotation + drot) % 4;
+
     for (int i = 0; i < 4; i++) {
-        TetrisBlock.blockCords[i][0] += dx;
-        TetrisBlock.blockCords[i][1] += dy;
+        int rowOff = row + blockRotOffsets[TetrisBlock->blockType][rot][i][0];
+        int colOff = col + blockRotOffsets[TetrisBlock->blockType][rot][i][1];
 
-        if (TetrisBlock.blockCords[i][0] >= 10 ||
-            TetrisBlock.blockCords[i][1] >= 40){
-                return 1;
-        }
+        if (colOff >= 10 || rowOff >= 40) return 1;
 
+        if (colOff < 0 || rowOff < 0) return 1;
 
-        if (TetrisBlock.blockCords[i][0] < 0 ||
-            TetrisBlock.blockCords[i][1] < 0){
-                return 1;
-        }
+        if (Board->grid[colOff][rowOff] > 0) return 1;
+    }
 
-        if (Board->grid[TetrisBlock.blockCords[i][1]][TetrisBlock.blockCords[i][0]] > 0){
-                return 1;
-            }
-        }
     return 0;
 }
 
 
-void translatePiece(Piece* tetrisBlock, int dx, int dy) {
-    for (int i = 0; i < 4; i++) {
-        TetrisBlock->blockCords[i][0] += dx;
-        TetrisBlock->blockCords[i][1] += dy;
-    }
-}
+int transCollision(Piece* TetrisBlock, Board* Board, int dx, int dy){
 
-void rotatePiece(Piece* tetrisBlock, int dx, int dy){
-    
-}
-
-int transCollision(Piece* TetrisBlock, int dx, int dy, Board* Board){
-
-    if (!checkCollision(*TetrisBlock, dx, dy, Board)){
-        translatePiece(TetrisBlock, dx, dy);
+    if (!checkCollision(TetrisBlock, Board, dx, dy, 0)){
+        TetrisBlock->oriCol += dx;
+        TetrisBlock->oriRow += dy;
         return 1;
     }
+
     return 0;
 
-
 }
 
-void rotCollision(Piece* TetrisBlock, int dx, int dy, Board* Board){
+int rotCollision(Piece* TetrisBlock, Board* Board, int drot){
 
+    if (!checkCollision(TetrisBlock, Board, 0, 0, drot)){
+        TetrisBlock->rotation = (TetrisBlock->rotation + drot) % 4;
+        return 1;
+    }
+
+    return 0;
 }
-
-
-//I want to implement a binary search tree becuase its technically more efficient but
-//its ok readable code is more important methinks, maybe ill comment a binTree version
-//and ask kyle what he thinks
 
 void hardDropPiece(Piece* TetrisBlock, Board* Board){
-    int i = 0;
-    for(i = 0; i < 25; i++){
-        if (checkCollision(*TetrisBlock, 0, -i, Board))
+    int displacement;
+    for(displacement = 1; displacement < 25; displacement++){
+        if (checkCollision(TetrisBlock, Board, 0, displacement, 0))
             break;
     }
 
-    transCollision(TetrisBlock, 0, -(i-1), Board);
+    transCollision(TetrisBlock, Board, 0, displacement-1);
 }
 
 //Places piece on to the board
-int placePiece(Piece* TetrisBlock, Board* Board){
+void placePiece(Piece* TetrisBlock, Board* Board){
 
     for (int i = 0; i < 4; i++){
-        Board->grid[TetrisBlock->blockCords[i][0]][TetrisBlock->blockCords[i][1]] = TetrisBlock->blockType;
+        Board->grid[TetrisBlock->oriCol + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][0]][TetrisBlock->oriRow + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][1]] = TetrisBlock->blockType;
     }
+
+}
+
+void drawPiece(SDL_Renderer *renderer, Piece *TetrisBlock){
+
+    Color bColor = PieceColors[TetrisBlock->blockType];
+
+    for (int i = 0; i < 4; i++){
+        int col = TetrisBlock->oriCol + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][0];
+        int row = TetrisBlock->oriRow + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][1];
+        SDL_Rect rect = {col * CELL, row * CELL, CELL, CELL};
+
+        SDL_SetRenderDrawColor(renderer, bColor.r, bColor.g, bColor.b, 255); // use color from piece
+        SDL_RenderFillRect(renderer, &rect);
+
+    }
+}
+
+void drawGhostPiece(SDL_Renderer *renderer, Board* Board, Piece *TetrisBlock){
+
+    Color bColor = PieceColors[TetrisBlock->blockType];
+
+    int displacement;
+    for(displacement = 1; displacement < 25; displacement++){
+        if (checkCollision(TetrisBlock, Board, 0, displacement, 0))
+            break;
+    }
+
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    for (int i = 0; i < 4; i++){
+        int col = TetrisBlock->oriCol + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][0];
+        int row = TetrisBlock->oriRow + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][1];
+        row = row + displacement - 1;
+        SDL_Rect rect = {col * CELL, row * CELL, CELL, CELL};
+
+        SDL_SetRenderDrawColor(renderer, bColor.r, bColor.g, bColor.b, 80); // use color from piece
+        SDL_RenderFillRect(renderer, &rect);
+
+    }
+
 
 }
 

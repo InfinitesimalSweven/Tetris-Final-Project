@@ -1,9 +1,16 @@
 #ifndef BOARD_H
 #define BOARD_H
+#define ROWS 40
+#define COLS 10
+#include <SDL2/SDL.h>
 
-#define BLOCKTYPES 7
-#define BLOCKCORDS 4
-#define CORDS 2
-#define ROTATIONS 4
+typedef struct {
+    int grid[COLS][ROWS];
+    int score;
+    int level;
+} Board;
 
-int spawnPos[BLOCKTYPES][BLOCKCORDS][CORDS];
+void drawBoard(SDL_Renderer *renderer, Board* TetrisBoard);
+Board createBoard(int score, int level);
+
+#endif
