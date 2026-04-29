@@ -51,7 +51,7 @@ void checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
         }
 
         if (isFull){
-            for(int i = TetrisBoard->grid[0][y], i < (40-TetrisBoard->grid[0][y]), i++){
+            for(int i = TetrisBoard->grid[0][y]; i < (40-TetrisBoard->grid[0][y]); i++){
                 memcpy ( TetrisBoard->grid[0][y], TetrisBoard->grid[0][y+1], sizeof(int)*COLS );
             }
         }

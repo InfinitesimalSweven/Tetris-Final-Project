@@ -13,7 +13,7 @@ const int spawnPos[BLOCKTYPES][CORDS] = { //7, 2
     {17,4}, // S
     {17,3}, // Z
     {17,4}, // T
-}
+};
 
 
 const int blockRotOffsets[BLOCKTYPES][ROTATIONS][BLOCKCORDS][CORDS] = {
@@ -65,9 +65,9 @@ const int blockRotOffsets[BLOCKTYPES][ROTATIONS][BLOCKCORDS][CORDS] = {
         {{1,0},{1,1},{1,2},{2,1}},
         {{0,1},{1,0},{1,1},{2,1}},
     }
-}
+};
 
-const int rotTestJLSTZ[TESTS][ROTATIONS*2][CORDS]{
+const int rotTestJLSTZ[TESTS][ROTATIONS*2][CORDS] = {
     {{0,0},{-1,0},{-1,-1},{0,+2}, {-1,+2}}, //0 -> R (0 -> 1)
     {{0,0},{+1,0},{+1,+1},{0,-2}, {+1,-2}}, //R -> 0 (1 -> 0)
     {{0,0},{+1,0},{+1,+1},{0,-2}, {+1,-2}}, //R -> 2 (1 -> 2)
@@ -76,9 +76,9 @@ const int rotTestJLSTZ[TESTS][ROTATIONS*2][CORDS]{
     {{0,0},{-1,0},{-1,+1},{0,-2}, {-1,-2}}, //L -> 2 (3 -> 2)
     {{0,0},{-1,0},{-1,+1},{0,-2}, {-1,-2}}, //L -> 0 (3 -> 0)
     {{0,0},{+1,0},{+1,-1},{0,+2}, {+1,+2}}, //0 -> L (0 -> 3)
-}
+};
 
-const int rotTestI[TESTS][ROTATIONS*2][CORDS]{
+const int rotTestI[TESTS][ROTATIONS*2][CORDS] = {
     {{0,0},{-2,0},{+1,0},{-2,+1}, {+1,-2}}, //0 -> R (0 -> 1)
     {{0,0},{+2,0},{-1,0},{+2,-1}, {-1,+2}}, //R -> 0 (1 -> 0)
     {{0,0},{-1,0},{+2,0},{-1,-2}, {+2,+1}}, //R -> 2 (1 -> 2)
@@ -87,4 +87,4 @@ const int rotTestI[TESTS][ROTATIONS*2][CORDS]{
     {{0,0},{-2,0},{+1,0},{-2,+1}, {+1,-2}}, //L -> 2 (3 -> 2)
     {{0,0},{+1,0},{-2,0},{+1,+2}, {-2,-1}}, //L -> 0 (3 -> 0)
     {{0,0},{-1,0},{+2,0},{-1,-2}, {+2,+1}}, //0 -> L (0 -> 3)
-}
+};

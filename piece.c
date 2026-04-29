@@ -78,7 +78,7 @@ void hardDropPiece(Piece* TetrisBlock, Board* Board){
     }
 
     transCollision(TetrisBlock, Board, 0, displacement-1);
-}co
+}co;
 
 //Places piece on to the board
 void placePiece(Piece* TetrisBlock, Board* Board){
