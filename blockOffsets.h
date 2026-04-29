@@ -5,8 +5,11 @@
 #define BLOCKCORDS 4
 #define CORDS 2
 #define ROTATIONS 4
+#define TESTS 5
 
 extern const int spawnPos[BLOCKTYPES][CORDS];
 extern const int blockRotOffsets[BLOCKTYPES][ROTATIONS][BLOCKCORDS][CORDS];
+extern const int rotTestI[TESTS][ROTATIONS*2][CORDS];
+extern const int rotTestJLSTZ[TESTS][ROTATIONS*2][CORDS];
 
 #endif

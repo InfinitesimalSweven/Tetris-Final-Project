@@ -12,10 +12,14 @@ typedef enum {
     EMPTY, I_BLOCK, J_BLOCK, L_BLOCK, O_BLOCK, S_BLOCK, Z_BLOCK, T_BLOCK
 } BlockType;
 
+typedef enum {
+    ROT_0, ROT_R, ROT_2, ROT_L
+} Rotation;
+
 typedef struct {
     int oriCol;
     int oriRow;
-    int rotation;
+    Rotation rotation;
     BlockType blockType;
 } Piece;
 

@@ -31,7 +31,7 @@ int checkCollision(Piece* TetrisBlock, Board* Board, int dx, int dy, int drot) {
 
     int col = TetrisBlock->oriCol + dx;
     int row = TetrisBlock->oriRow + dy;
-    int rot = (TetrisBlock->rotation + drot) % 4;
+    Rotation rot = (TetrisBlock->rotation + drot) % 4;
 
     for (int i = 0; i < 4; i++) {
         int rowOff = row + blockRotOffsets[TetrisBlock->blockType][rot][i][0];
@@ -78,7 +78,7 @@ void hardDropPiece(Piece* TetrisBlock, Board* Board){
     }
 
     transCollision(TetrisBlock, Board, 0, displacement-1);
-}
+}co
 
 //Places piece on to the board
 void placePiece(Piece* TetrisBlock, Board* Board){
