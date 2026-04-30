@@ -36,8 +36,8 @@ int checkCollision(Piece* TetrisBlock, Board* Board, int dx, int dy, int drot) {
     Rotation rot = (TetrisBlock->rotation + drot + 4) % 4;
 
     for (int i = 0; i < 4; i++) {
-        int rowOff = row + blockRotOffsets[TetrisBlock->blockType][rot][i][0];
-        int colOff = col + blockRotOffsets[TetrisBlock->blockType][rot][i][1];
+        int colOff = col + blockRotOffsets[TetrisBlock->blockType][rot][i][0];
+        int rowOff = row + blockRotOffsets[TetrisBlock->blockType][rot][i][1];
 
         if (colOff >= 10 || rowOff >= 40) return 1;
 
