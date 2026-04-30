@@ -30,11 +30,24 @@ int main(){
 			if (event.type == SDL_QUIT) running = 0;
 			if (event.type == SDL_KEYDOWN) {
 				switch (event.key.keysym.sym) {
-					case SDLK_LEFT:  transCollision(&piece, &board, -1, 0); break;
-					case SDLK_RIGHT: transCollision(&piece, &board,  1, 0); break;
-					case SDLK_DOWN:  transCollision(&piece, &board,  0, 1); break;
-					case SDLK_UP:    rotCollision(&piece, &board, 1);       break;
-					case SDLK_SPACE: hardDropPiece(&piece, &board);         break;
+					case SDLK_LEFT:
+						transCollision(&piece, &board, -1, 0);
+						break;
+					case SDLK_RIGHT:
+						transCollision(&piece, &board,  1, 0);
+						break;
+					case SDLK_DOWN:
+						transCollision(&piece, &board,  0, 1);
+						break;
+					case SDLK_UP:
+						rotCollision(&piece, &board, 1);
+						break;
+					case SDLK_SPACE: 
+						hardDropPiece(&piece, &board);
+						placePiece(&piece, &board);
+						checkAndClearLine(&board, 0, ROWS - 1);
+						piece = createPiece(rand() % 7 + 1);
+						break;
 				}
 			}
 		}

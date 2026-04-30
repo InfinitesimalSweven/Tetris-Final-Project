@@ -21,9 +21,10 @@ Board createBoard(int score, int level){
 
 
 void drawBoard(SDL_Renderer *renderer, Board* TetrisBoard) {
+	int offset = 20; //top 20 rows are invisible
     for (int i = 0; i < COLS; i++) {
-        for (int j = 0; j < ROWS; j++) {
-            SDL_Rect rect = {i * CELL, j * CELL, CELL, CELL};
+        for (int j = offset; j < ROWS; j++) {
+            SDL_Rect rect = {i * CELL, (j - offset) * CELL, CELL, CELL};
 
             if (TetrisBoard->grid[i][j] > 0) {
                 Color bColor = PieceColors[TetrisBoard->grid[i][j]];
