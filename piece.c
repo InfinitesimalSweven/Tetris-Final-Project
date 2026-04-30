@@ -31,7 +31,7 @@ int checkCollision(Piece* TetrisBlock, Board* Board, int dx, int dy, int drot) {
 
     int col = TetrisBlock->oriCol + dx;
     int row = TetrisBlock->oriRow + dy;
-    Rotation rot = (TetrisBlock->rotation + drot) % 4;
+    Rotation rot = (TetrisBlock->rotation + drot + 4) % 4;
 
     for (int i = 0; i < 4; i++) {
         int rowOff = row + blockRotOffsets[TetrisBlock->blockType][rot][i][0];
@@ -60,14 +60,53 @@ int transCollision(Piece* TetrisBlock, Board* Board, int dx, int dy){
 
 }
 
-int rotCollision(Piece* TetrisBlock, Board* Board, int drot){
+//when using this function never rotate more than 1 states (always input 1 or -1).
+//This is because rotation tests only work for 1 step rotations
+//Also the only time you'd wanna go more than 1 rotation is just when there are two
+//succesive inputs...just call the function twice!
 
-    if (!checkCollision(TetrisBlock, Board, 0, 0, drot)){
-        TetrisBlock->rotation = (TetrisBlock->rotation + drot) % 4;
-        return 1;
+int rotCollision(Piece* TetrisBlock, Board* Board, int drot){
+        assert(drot == 1 || drot == -1); // only single-step rotations supported for this function
+
+        Rotation rot = TetrisBlock->rotation;
+
+        if (drot == 1)
+            rotIndex = (2 * rot) % 8;
+
+        if (drot == -1)
+            rotIndex = (2 * rot - 1 + 8) % 8;
+
+        if (TetrisBlock->block == I_block){
+            for (int test = 0; test < 5; test++){
+                TetrisBlock->oriCol += rotTestI[test][rotIndex][0];
+                TetrisBlock->oriRow += rotTestI[test][rotIndex][1];
+
+                if (!checkCollision(TetrisBlock, Board, 0, 0, drot)){
+                    TetrisBlock->rotation = (TetrisBlock->rotation + drot + 4) % 4;
+                    return 1; //successful rotation!
+                }
+
+                TetrisBlock->oriCol -= rotTestI[test][rotIndex][0];
+                TetrisBlock->oriRow -= rotTestI[test][rotIndex][1];
+            }
+        }
+
+        else {
+            for (int test = 0; test < 5; test++){
+                TetrisBlock->oriCol += rotTestJLSTZ[test][rotIndex][0];
+                TetrisBlock->oriRow += rotTestJLSTZ[test][rotIndex][1];
+
+                if (!checkCollision(TetrisBlock, Board, 0, 0, drot)){
+                    TetrisBlock->rotation = (TetrisBlock->rotation + drot + 4) % 4;
+                    return 1; //successful rotation!
+                }
+
+                TetrisBlock->oriCol -= rotTestJLSTZ[test][rotIndex][0];
+                TetrisBlock->oriRow -= rotTestJLSTZ[test][rotIndex][1];
+        }
     }
 
-    return 0;
+    return 0; //unsuccesful rotation :(
 }
 
 void hardDropPiece(Piece* TetrisBlock, Board* Board){
@@ -104,6 +143,9 @@ void drawPiece(SDL_Renderer *renderer, Piece *TetrisBlock){
     }
 }
 
+//This piece is the indicator piece that tells you where you will place your piece!
+//Basically just the drawPiece function but with reduced opacity
+//Made the function seperate for clarity
 void drawGhostPiece(SDL_Renderer *renderer, Board* Board, Piece *TetrisBlock){
 
     Color bColor = PieceColors[TetrisBlock->blockType];
