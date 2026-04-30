@@ -38,23 +38,24 @@ void drawBoard(SDL_Renderer *renderer, Board* TetrisBoard) {
     }
 }
 
-
 void checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
-    int yDelta = yHigh-yLow;
+
     int isFull;
     for (int y = yHigh; y >= yLow; y--){
         isFull = 1;
-        for (int x = 0; x < 10; x++){
-            if (TetrisBoard->grid[x][y] > 0){
+        for (int x = 0; x < COLS; x++){
+            if (TetrisBoard->grid[x][y] == 0){
                 isFull = 0;
+                break;
             }
         }
 
         if (isFull){
-            for(int i = TetrisBoard->grid[0][y]; i < (40-TetrisBoard->grid[0][y]); i++){
-                memcpy ( TetrisBoard->grid[0][y], TetrisBoard->grid[0][y+1], sizeof(int)*COLS );
+            for (int i = y; i > 0; i--){
+                memcpy(TetrisBoard->grid[i], TetrisBoard->grid[i-1], sizeof(int)*COLS);
             }
+            memset(TetrisBoard->grid[0], 0, sizeof(int)*COLS);
+            y++; // re-check same row since lines shifted down
         }
-
     }
-} //TODO: Finish this clearLine Function
+}

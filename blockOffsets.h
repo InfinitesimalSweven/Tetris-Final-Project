@@ -9,7 +9,7 @@
 
 extern const int spawnPos[BLOCKTYPES][CORDS];
 extern const int blockRotOffsets[BLOCKTYPES][ROTATIONS][BLOCKCORDS][CORDS];
-extern const int rotTestI[TESTS][ROTATIONS*2][CORDS];
-extern const int rotTestJLSTZ[TESTS][ROTATIONS*2][CORDS];
+extern const int rotTestI[ROTATIONS*2][TESTS][CORDS];
+extern const int rotTestJLSTZ[ROTATIONS*2][TESTS][CORDS];
 
 #endif

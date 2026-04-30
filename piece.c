@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <assert.h>
+
 #include "blockOffsets.h"
 #include "board.h"
 #include "piece.h"
@@ -67,7 +69,8 @@ int transCollision(Piece* TetrisBlock, Board* Board, int dx, int dy){
 
 int rotCollision(Piece* TetrisBlock, Board* Board, int drot){
         assert(drot == 1 || drot == -1); // only single-step rotations supported for this function
-
+        
+        int rotIndex;
         Rotation rot = TetrisBlock->rotation;
 
         if (drot == 1)
@@ -76,18 +79,18 @@ int rotCollision(Piece* TetrisBlock, Board* Board, int drot){
         if (drot == -1)
             rotIndex = (2 * rot - 1 + 8) % 8;
 
-        if (TetrisBlock->block == I_block){
+        if (TetrisBlock->blockType == I_BLOCK){
             for (int test = 0; test < 5; test++){
-                TetrisBlock->oriCol += rotTestI[test][rotIndex][0];
-                TetrisBlock->oriRow += rotTestI[test][rotIndex][1];
+                TetrisBlock->oriCol += rotTestI[rotIndex][test][0];
+                TetrisBlock->oriRow += rotTestI[rotIndex][test][1];
 
                 if (!checkCollision(TetrisBlock, Board, 0, 0, drot)){
                     TetrisBlock->rotation = (TetrisBlock->rotation + drot + 4) % 4;
                     return 1; //successful rotation!
                 }
 
-                TetrisBlock->oriCol -= rotTestI[test][rotIndex][0];
-                TetrisBlock->oriRow -= rotTestI[test][rotIndex][1];
+                TetrisBlock->oriCol -= rotTestI[rotIndex][test][0];
+                TetrisBlock->oriRow -= rotTestI[rotIndex][test][1];
             }
         }
 
@@ -117,7 +120,7 @@ void hardDropPiece(Piece* TetrisBlock, Board* Board){
     }
 
     transCollision(TetrisBlock, Board, 0, displacement-1);
-}co;
+}
 
 //Places piece on to the board
 void placePiece(Piece* TetrisBlock, Board* Board){
