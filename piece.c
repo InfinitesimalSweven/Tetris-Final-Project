@@ -29,6 +29,22 @@ Piece createPiece(BlockType blockType){
     return TetrisBlock;
 }
 
+void createPieceBucket(Piece pieceBucket7[7]) {
+    int indices[7] = {0, 1, 2, 3, 4, 5, 6};
+
+    // Implemented fisher-yates shuffle
+    for (int i = 6; i > 0; i--) {
+        int j = rand() % (i + 1);
+        int tmp = indices[i];
+        indices[i] = indices[j];
+        indices[j] = tmp;
+    }
+
+    for (int i = 0; i < 7; i++) {
+        pieceBucket7[i] = createPiece(indices[i]);
+    }
+}
+
 int checkCollision(Piece* TetrisBlock, Board* Board, int dx, int dy, int drot) {
 
     int col = TetrisBlock->oriCol + dx;
