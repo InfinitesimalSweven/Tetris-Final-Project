@@ -41,7 +41,7 @@ void createPieceBucket(Piece pieceBucket7[7]) {
     }
 
     for (int i = 0; i < 7; i++) {
-        pieceBucket7[i] = createPiece(indices[i]);
+        pieceBucket7[i+1] = createPiece(indices[i]);
     }
 }
 
