@@ -18,10 +18,12 @@ int main(){
 	int gravTimer = 800;
 	int lastFall = SDL_GetTicks();
 	
-	SDL_Surface *screenSurface = SDL_GetWindowSurface( window );//Gets surface so we can draw on it
-	SDL_UpdateWindowSurface(window);											
+											
 	Board board = createBoard(0, 0);
-	Piece piece = createPiece(rand() % 7 + 1); //TODO; Tommorow make Tetris bag (contains 7 pieces so you dont have repeats, this randomly defines the type of block)
+	Piece pieceBucket[7];
+	createPieceBucket(pieceBucket);
+	int bucketIndex = 0;
+	Piece piece = pieceBucket[bucketIndex];	//TODO; Tommorow make Tetris bag (contains 7 pieces so you dont have repeats, this randomly defines the type of block)
 	
 	
 	while (running) {
@@ -46,14 +48,27 @@ int main(){
 						hardDropPiece(&piece, &board);
 						placePiece(&piece, &board);
 						checkAndClearLine(&board, 0, ROWS - 1);
-						piece = createPiece(rand() % 7 + 1);
+						bucketIndex++;
+						if (bucketIndex>=7){
+							createPieceBucket(pieceBucket);
+							bucketIndex = 0;
+						}
 						break;
 				}
 			}
 		}
 		// in game loop:
 		if (SDL_GetTicks() - lastFall > gravTimer) {
-			transCollision(&piece, &board, 0, 1);
+			if(!transCollision(&piece, &board, 0, 1)){
+				placePiece(&piece, &board);
+				checkAndClearLine(&board, 0, ROWS - 1);
+				bucketIndex++;
+				if (bucketIndex >= 7) {
+					createPieceBucket(pieceBucket);
+					bucketIndex = 0;
+				}
+				piece = pieceBucket[bucketIndex];
+			}
 			lastFall = SDL_GetTicks();
 		}
 

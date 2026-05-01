@@ -30,7 +30,7 @@ Piece createPiece(BlockType blockType){
 }
 
 void createPieceBucket(Piece pieceBucket7[7]) {
-    int indices[7] = {0, 1, 2, 3, 4, 5, 6};
+    int indices[7] = {1, 2, 3, 4, 5, 6, 7};
 
     // Implemented fisher-yates shuffle
     for (int i = 6; i > 0; i--) {
@@ -41,7 +41,7 @@ void createPieceBucket(Piece pieceBucket7[7]) {
     }
 
     for (int i = 0; i < 7; i++) {
-        pieceBucket7[i+1] = createPiece(indices[i]);
+        pieceBucket7[i] = createPiece(indices[i]);
     }
 }
 
