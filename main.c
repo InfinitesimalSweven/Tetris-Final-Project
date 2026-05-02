@@ -53,6 +53,7 @@ int main(){
 							createPieceBucket(pieceBucket);
 							bucketIndex = 0;
 						}
+						piece = pieceBucket[bucketIndex];
 						break;
 				}
 			}

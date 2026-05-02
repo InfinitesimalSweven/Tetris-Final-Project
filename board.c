@@ -53,9 +53,13 @@ void checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
 
         if (isFull){
             for (int i = y; i > 0; i--){
-                memcpy(TetrisBoard->grid[i], TetrisBoard->grid[i-1], sizeof(int)*COLS);
+                for (int x = 0; x < COLS; x++){
+                    TetrisBoard->grid[x][i] = TetrisBoard->grid[x][i-1];
+                }
             }
-            memset(TetrisBoard->grid[0], 0, sizeof(TetrisBoard->grid[0]));
+            for (int x = 0; x < COLS; x++){
+                TetrisBoard->grid[x][0] = 0;
+            }
             y++; // re-check same row since lines shifted down
         }
     }

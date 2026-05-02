@@ -112,8 +112,8 @@ int rotCollision(Piece* TetrisBlock, Board* Board, int drot){
 
         else {
             for (int test = 0; test < 5; test++){
-                TetrisBlock->oriCol += rotTestJLSTZ[test][rotIndex][0];
-                TetrisBlock->oriRow += rotTestJLSTZ[test][rotIndex][1];
+                TetrisBlock->oriCol += rotTestJLSTZ[rotIndex][test][0];
+                TetrisBlock->oriRow += rotTestJLSTZ[rotIndex][test][1];
 
                 if (!checkCollision(TetrisBlock, Board, 0, 0, drot)){
                     TetrisBlock->rotation = (TetrisBlock->rotation + drot + 4) % 4;
