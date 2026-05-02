@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall `sdl2-config --cflags`
-LIBS = LIBS = `sdl2-config --libs` -lSDL2_ttf
+LIBS = `sdl2-config --libs` -lSDL2_ttf
 
 tetris: main.o board.o piece.o blockOffsets.o hold.o
 	$(CC) -o tetris main.o board.o piece.o blockOffsets.o hold.o $(LIBS)

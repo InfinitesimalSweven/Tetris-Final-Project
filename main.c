@@ -15,7 +15,14 @@ int main(){
 	SDL_Init(SDL_INIT_VIDEO); //SDL_Init(SDL_INIT_AUDIO); Include only if we want to code in sound
 	SDL_Window *window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); //-1 just uses best case!
-	TTF_Font *font = TTF_OpenFont("PressStart2P-Regular", 24);
+	TTF_Init();
+	TTF_Font *font = TTF_OpenFont("PressStart2P-Regular.ttf", 24);
+	
+	/*if (!font) {
+    printf("Font error: %s\n", TTF_GetError());
+    return 1;
+	}*/ //font tester
+
 
 	int running = 1;
 	int gravTimer = 800;
@@ -52,7 +59,18 @@ int main(){
 						rotCollision(&piece, &board, -1);
 						break;
 					case SDLK_c:
-						doHold(&piece, &hold);
+						if (hold.heldEmpty) {
+        					doHold(&piece, &hold);
+        					bucketIndex++;
+        					if (bucketIndex >= 7) {
+            					createPieceBucket(pieceBucket);
+            					bucketIndex = 0;
+        					}
+        					piece = pieceBucket[bucketIndex];
+        					hold.hasHeld = 1;
+    						} else {
+        					doHold(&piece, &hold);
+    						}
 						break;
 					case SDLK_SPACE:
 						hardDropPiece(&piece, &board);
@@ -64,6 +82,7 @@ int main(){
 							bucketIndex = 0;
 						}
 						piece = pieceBucket[bucketIndex];
+						hold.hasHeld = 0;
 						break;
 				}
 			}
@@ -79,21 +98,24 @@ int main(){
 					bucketIndex = 0;
 				}
 				piece = pieceBucket[bucketIndex];
+				hold.hasHeld = 0;
 			}
 			lastFall = SDL_GetTicks();
+			if (isGameEnd(&board)){
+				SDL_Quit();
+		}
 		}
 
 		//Render
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
-		
 
 		drawPiece(renderer, &piece);
 		drawBoard(renderer, &board);
 		drawGhostPiece(renderer, &board, &piece);
 		drawHold(renderer, &hold, font);
 
-		
+
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
 	}

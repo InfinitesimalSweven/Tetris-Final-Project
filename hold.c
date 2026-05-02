@@ -30,20 +30,21 @@ void drawHold(SDL_Renderer *renderer, HoldSlot *hold, TTF_Font *font){
     SDL_Rect labelRect = {10, 10, w, h};
     SDL_RenderCopy(renderer, holdTexture, NULL, &labelRect);
 
-    SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
-    SDL_Rect holdBox = {5, 35, 4 * CELL, 4 * CELL};
-    SDL_RenderDrawRect(renderer, &holdBox);
 
-    if (hold->heldEmpty){
+
+    if (!hold->heldEmpty){
         Color bColor = PieceColors[hold->piece.blockType];
 
         for (int i = 0; i < 4; i++){
-            int col = hold->piece.oriCol + blockRotOffsets[hold->piece.blockType][0][i][0];
-            int row = hold->piece.oriRow + blockRotOffsets[hold->piece.blockType][0][i][1];
+            int col = blockRotOffsets[hold->piece.blockType][0][i][0];
+            int row = blockRotOffsets[hold->piece.blockType][0][i][1];
             SDL_Rect rect = {10 + col * CELL, 60 + row * CELL, CELL, CELL};
 
             SDL_SetRenderDrawColor(renderer, bColor.r, bColor.g, bColor.b, 255); // use color from piece
             SDL_RenderFillRect(renderer, &rect);
+            SDL_RenderFillRect(renderer, &rect);
+            SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
+            SDL_RenderDrawRect(renderer, &rect);
 
         }
     }
