@@ -2,6 +2,8 @@
 #define BOARD_H
 #define ROWS 40
 #define COLS 10
+#define CELL 32
+
 #include <SDL2/SDL.h>
 
 typedef struct {

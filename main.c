@@ -3,6 +3,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "board.h"
 #include "piece.h"
+#include "hold.h"
 
 //https://tetris.wiki/Tetris_Guideline
 //TODO: Kyle read the guidelines for the project!
@@ -20,8 +21,8 @@ int main(){
 	int gravTimer = 800;
 	int lastFall = SDL_GetTicks();
 	
-											
 	Board board = createBoard(0, 0);
+	HoldSlot hold = {.piece = createPiece(EMPTY), .heldEmpty = 1, .hasHeld = 0};
 	Piece pieceBucket[7];
 	createPieceBucket(pieceBucket);
 	int bucketIndex = 0;
@@ -49,6 +50,9 @@ int main(){
 						break;
 					case SDLK_z:
 						rotCollision(&piece, &board, -1);
+						break;
+					case SDLK_c:
+						doHold(&piece, &hold);
 						break;
 					case SDLK_SPACE:
 						hardDropPiece(&piece, &board);
@@ -87,6 +91,7 @@ int main(){
 		drawPiece(renderer, &piece);
 		drawBoard(renderer, &board);
 		drawGhostPiece(renderer, &board, &piece);
+		drawHold(renderer, &hold, font);
 
 		
 		SDL_RenderPresent(renderer);
