@@ -154,7 +154,7 @@ void drawPiece(SDL_Renderer *renderer, Piece *TetrisBlock){
     for (int i = 0; i < 4; i++){
         int col = TetrisBlock->oriCol + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][0];
         int row = TetrisBlock->oriRow + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][1];
-        SDL_Rect rect = {col * CELL, (row - offset) * CELL, CELL, CELL};
+        SDL_Rect rect = {160 + col * CELL, (row - offset) * CELL, CELL, CELL};
 
         SDL_SetRenderDrawColor(renderer, bColor.r, bColor.g, bColor.b, 255); // use color from piece
         SDL_RenderFillRect(renderer, &rect);
@@ -180,7 +180,7 @@ void drawGhostPiece(SDL_Renderer *renderer, Board* Board, Piece *TetrisBlock){
         int col = TetrisBlock->oriCol + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][0];
         int row = TetrisBlock->oriRow + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][1];
         row = row + displacement - 1;
-        SDL_Rect rect = {col * CELL, (row - offset) * CELL, CELL, CELL};
+        SDL_Rect rect = {160 + col * CELL, (row - offset) * CELL, CELL, CELL};
 
         SDL_SetRenderDrawColor(renderer, bColor.r, bColor.g, bColor.b, 80); // use color from piece
         SDL_RenderFillRect(renderer, &rect);

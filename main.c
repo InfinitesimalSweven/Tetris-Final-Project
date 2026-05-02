@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include "board.h"
 #include "piece.h"
 
 //https://tetris.wiki/Tetris_Guideline
 //TODO: Kyle read the guidelines for the project!
-int const WIDTH = 480;
+int const WIDTH = 640;
 int const HEIGHT = 640;
 int main(){
 
@@ -13,7 +14,8 @@ int main(){
 	SDL_Init(SDL_INIT_VIDEO); //SDL_Init(SDL_INIT_AUDIO); Include only if we want to code in sound
 	SDL_Window *window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); //-1 just uses best case!
-	
+	TTF_Font *font = TTF_OpenFont("PressStart2P-Regular", 24);
+
 	int running = 1;
 	int gravTimer = 800;
 	int lastFall = SDL_GetTicks();
@@ -42,9 +44,13 @@ int main(){
 						transCollision(&piece, &board,  0, 1);
 						break;
 					case SDLK_UP:
+					case SDLK_x:
 						rotCollision(&piece, &board, 1);
 						break;
-					case SDLK_SPACE: 
+					case SDLK_z:
+						rotCollision(&piece, &board, -1);
+						break;
+					case SDLK_SPACE:
 						hardDropPiece(&piece, &board);
 						placePiece(&piece, &board);
 						checkAndClearLine(&board, 0, ROWS - 1);
@@ -58,7 +64,7 @@ int main(){
 				}
 			}
 		}
-		// in game loop:
+		
 		if (SDL_GetTicks() - lastFall > gravTimer) {
 			if(!transCollision(&piece, &board, 0, 1)){
 				placePiece(&piece, &board);
@@ -77,7 +83,7 @@ int main(){
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 		
-		
+
 		drawPiece(renderer, &piece);
 		drawBoard(renderer, &board);
 		drawGhostPiece(renderer, &board, &piece);
