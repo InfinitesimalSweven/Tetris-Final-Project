@@ -13,4 +13,5 @@ typedef struct {
 void drawBoard(SDL_Renderer *renderer, Board* TetrisBoard);
 Board createBoard(int score, int level);
 void checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh);
+int isGameEnd(Board* TetrisBoard);
 #endif

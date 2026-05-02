@@ -64,3 +64,11 @@ void checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
         }
     }
 }
+
+int isGameEnd(Board* TetrisBoard){
+    for (int x = 0; x < COLS; x++){
+                if (TetrisBoard->grid[x][19] == 1)
+                    return 1;
+    }
+    return 0;
+}

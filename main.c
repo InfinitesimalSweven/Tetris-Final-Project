@@ -77,10 +77,11 @@ int main(){
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 		
-
+		
+		drawPiece(renderer, &piece);
 		drawBoard(renderer, &board);
 		drawGhostPiece(renderer, &board, &piece);
-		drawPiece(renderer, &piece);
+
 		
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
