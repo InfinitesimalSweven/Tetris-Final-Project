@@ -30,6 +30,7 @@ int main(){
 	int gravTimer = 800;
 	int lockDelay = 500;
 	int lastLand = -1;
+	int score = 0;
 	int lastFall = SDL_GetTicks();
 	
 	Board board = createBoard(0, 0);
@@ -54,8 +55,9 @@ int main(){
 						transCollision(&piece, &board,  1, 0);
 						break;
 					case SDLK_DOWN:
-						transCollision(&piece, &board,  0, 1);
-						break;
+						if (transCollision(&piece, &board, 0, 1))
+        					score += 1;
+    					break;
 					case SDLK_UP:
 					case SDLK_x:
 						if (rotCollision(&piece, &board, 1))
@@ -82,10 +84,17 @@ int main(){
 						break;
 					case SDLK_SPACE:
 						if (event.key.repeat == 0) {
-							hardDropPiece(&piece, &board);
+							int cellsDropped = hardDropPiece(&piece, &board);
 							placePiece(&piece, &board);
-							checkAndClearLine(&board, 0, ROWS - 1);
+							int linesCleared = checkAndClearLine(&board, 0, ROWS - 1);
+							switch (linesCleared) {
+								case 1: score += 100; break;
+								case 2: score += 300; break;
+								case 3: score += 500; break;
+								case 4: score += 800; break;
+							}
 							bucketIndex++;
+							score += 2 * cellsDropped;
 							if (bucketIndex >= 7) {
 								memcpy(pieceBucketCurrent, pieceBucketNext, sizeof(pieceBucketNext));
 								createPieceBucket(pieceBucketNext);
@@ -109,7 +118,13 @@ int main(){
 				lastLand = SDL_GetTicks();
 			if (SDL_GetTicks() - lastLand > lockDelay){
 				placePiece(&piece, &board);
-				checkAndClearLine(&board, 0, ROWS - 1);
+				int linesCleared = checkAndClearLine(&board, 0, ROWS - 1);
+				switch (linesCleared) {
+					case 1: score += 100; break;
+					case 2: score += 300; break;
+					case 3: score += 500; break;
+					case 4: score += 800; break;
+				}
 				bucketIndex++;
         		if (bucketIndex >= 7) {
 					memcpy(pieceBucketCurrent, pieceBucketNext, sizeof(pieceBucketNext));
@@ -137,6 +152,7 @@ int main(){
 		drawGhostPiece(renderer, &board, &piece);
 		drawHold(renderer, &hold, font);
 		drawNext(renderer, font, pieceBucketCurrent, pieceBucketNext, bucketIndex);
+		drawScore(renderer, font, score);
 	
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);

@@ -102,13 +102,13 @@ void drawHold(SDL_Renderer *renderer, HoldSlot *hold, TTF_Font *font){
 
 void drawNext(SDL_Renderer *renderer, TTF_Font *font, Piece pieceBucketCurrent[7], Piece pieceBucketNext[7], int currentIndex){
     SDL_Color white = {255, 255, 255};
-    SDL_Surface *holdSurface = TTF_RenderText_Solid(font, "NEXT", white);
-    SDL_Texture *holdTexture = SDL_CreateTextureFromSurface(renderer, holdSurface);
-    SDL_FreeSurface(holdSurface);
+    SDL_Surface *nextSurface = TTF_RenderText_Solid(font, "NEXT", white);
+    SDL_Texture *nextTexture = SDL_CreateTextureFromSurface(renderer, nextSurface);
+    SDL_FreeSurface(nextSurface);
     int w, h;
     TTF_SizeText(font, "NEXT", &w, &h);
     SDL_Rect labelRect = {490, 10, w, h};
-    SDL_RenderCopy(renderer, holdTexture, NULL, &labelRect);
+    SDL_RenderCopy(renderer, nextTexture, NULL, &labelRect);
 
     for (int n = 0; n < 5; n++) {
     int nextIndex = currentIndex + 1 + n;
@@ -132,13 +132,24 @@ void drawNext(SDL_Renderer *renderer, TTF_Font *font, Piece pieceBucketCurrent[7
     }
 }
 
-/*void drawScore(int score){
+void drawScore(SDL_Renderer *renderer, TTF_Font *font, int score){
     SDL_Color white = {255, 255, 255};
-    SDL_Surface *holdSurface = TTF_RenderText_Solid(font, "HOLD", white);
-    SDL_Texture *holdTexture = SDL_CreateTextureFromSurface(renderer, holdSurface);
-    SDL_FreeSurface(holdSurface);
+    SDL_Surface *scoreTextSurface = TTF_RenderText_Solid(font, "SCORE", white);
+    SDL_Texture *scoreTextTexture = SDL_CreateTextureFromSurface(renderer, scoreTextSurface);
+    SDL_FreeSurface(scoreTextSurface);
     int w, h;
-    TTF_SizeText(font, "HOLD", &w, &h);
-    SDL_Rect labelRect = {10, 10, w, h};
-    SDL_RenderCopy(renderer, holdTexture, NULL, &labelRect);
-}*/
+    TTF_SizeText(font, "SCORE", &w, &h);
+    SDL_Rect labelRect = {10, 60 + 3*CELL + 10, w, h};
+    SDL_RenderCopy(renderer, scoreTextTexture, NULL, &labelRect);
+
+    char scoreStr[20];
+    snprintf(scoreStr, sizeof(scoreStr), "%d", score);
+
+    SDL_Surface *scoreSurface = TTF_RenderText_Solid(font, scoreStr, white);
+    SDL_Texture *scoreTexture = SDL_CreateTextureFromSurface(renderer, scoreSurface);
+    SDL_FreeSurface(scoreSurface);
+    int w_2, h_2;
+    TTF_SizeText(font, scoreStr, &w_2, &h_2);
+    SDL_Rect scoreRect = {10, 60 + 3*CELL + 10 + 24 + 5, w_2/2, h_2/2};
+    SDL_RenderCopy(renderer, scoreTexture, NULL, &scoreRect);
+}

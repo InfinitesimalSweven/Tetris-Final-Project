@@ -19,9 +19,10 @@ Board createBoard(int score, int level){
     return TetrisBoard;
 }
 
-void checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
+int checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
 
     int isFull;
+    int linesCleared = 0;
     for (int y = yHigh; y >= yLow; y--){
         isFull = 1;
         for (int x = 0; x < COLS; x++){
@@ -32,6 +33,7 @@ void checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
         }
 
         if (isFull){
+            linesCleared++;
             for (int i = y; i > 0; i--){
                 for (int x = 0; x < COLS; x++){
                     TetrisBoard->grid[x][i] = TetrisBoard->grid[x][i-1];
@@ -43,6 +45,7 @@ void checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
             y++; // re-check same row since lines shifted down
         }
     }
+    return linesCleared;
 }
 
 int isGameEnd(Board* TetrisBoard){

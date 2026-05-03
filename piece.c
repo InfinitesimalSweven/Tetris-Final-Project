@@ -128,7 +128,7 @@ int rotCollision(Piece* TetrisBlock, Board* Board, int drot){
     return 0; //unsuccesful rotation :(
 }
 
-void hardDropPiece(Piece* TetrisBlock, Board* Board){
+int hardDropPiece(Piece* TetrisBlock, Board* Board){
     int displacement;
     for(displacement = 1; displacement < 40; displacement++){
         if (checkCollision(TetrisBlock, Board, 0, displacement, 0))
@@ -136,6 +136,7 @@ void hardDropPiece(Piece* TetrisBlock, Board* Board){
     }
 
     transCollision(TetrisBlock, Board, 0, displacement-1);
+    return displacement - 1;
 }
 
 //Places piece on to the board

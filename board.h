@@ -13,6 +13,6 @@ typedef struct {
 } Board;
 
 Board createBoard(int score, int level);
-void checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh);
+int checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh);
 int isGameEnd(Board* TetrisBoard);
 #endif

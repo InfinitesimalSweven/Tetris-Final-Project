@@ -29,7 +29,7 @@ Piece createPiece(BlockType blockType);
 int checkCollision(Piece* TetrisBlock, Board* Board, int dx, int dy, int drot);
 int transCollision(Piece* TetrisBlock, Board* Board, int dx, int dy);
 int rotCollision(Piece* TetrisBlock, Board* Board, int drot);
-void hardDropPiece(Piece* TetrisBlock, Board* Board);
+int hardDropPiece(Piece* TetrisBlock, Board* Board);
 void placePiece(Piece* TetrisBlock, Board* Board);
 void createPieceBucket(Piece pieceBucket7[7]);
 #endif
