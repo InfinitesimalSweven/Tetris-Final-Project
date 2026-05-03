@@ -9,6 +9,6 @@ typedef struct {
 } HoldSlot;
 
 void doHold(Piece *current, HoldSlot *HeldItem);
-void drawHold(SDL_Renderer *renderer, HoldSlot *hold, TTF_Font *font);
+
 
 #endif

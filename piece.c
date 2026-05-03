@@ -120,8 +120,8 @@ int rotCollision(Piece* TetrisBlock, Board* Board, int drot){
                     return 1; //successful rotation!
                 }
 
-                TetrisBlock->oriCol -= rotTestJLSTZ[test][rotIndex][0];
-                TetrisBlock->oriRow -= rotTestJLSTZ[test][rotIndex][1];
+                TetrisBlock->oriCol -= rotTestJLSTZ[rotIndex][test][0];
+                TetrisBlock->oriRow -= rotTestJLSTZ[rotIndex][test][1];
         }
     }
 
@@ -147,47 +147,6 @@ void placePiece(Piece* TetrisBlock, Board* Board){
 
 }
 
-void drawPiece(SDL_Renderer *renderer, Piece *TetrisBlock){
-	int offset = 20;
-    Color bColor = PieceColors[TetrisBlock->blockType];
 
-    for (int i = 0; i < 4; i++){
-        int col = TetrisBlock->oriCol + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][0];
-        int row = TetrisBlock->oriRow + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][1];
-        SDL_Rect rect = {160 + col * CELL, (row - offset) * CELL, CELL, CELL};
-
-        SDL_SetRenderDrawColor(renderer, bColor.r, bColor.g, bColor.b, 255); // use color from piece
-        SDL_RenderFillRect(renderer, &rect);
-
-    }
-}
-
-//This piece is the indicator piece that tells you where you will place your piece!
-//Basically just the drawPiece function but with reduced opacity
-//Made the function seperate for clarity
-void drawGhostPiece(SDL_Renderer *renderer, Board* Board, Piece *TetrisBlock){
-	int offset = 20;
-    Color bColor = PieceColors[TetrisBlock->blockType];
-
-    int displacement;
-    for(displacement = 1; displacement < 25; displacement++){
-        if (checkCollision(TetrisBlock, Board, 0, displacement, 0))
-            break;
-    }
-
-    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-    for (int i = 0; i < 4; i++){
-        int col = TetrisBlock->oriCol + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][0];
-        int row = TetrisBlock->oriRow + blockRotOffsets[TetrisBlock->blockType][TetrisBlock->rotation][i][1];
-        row = row + displacement - 1;
-        SDL_Rect rect = {160 + col * CELL, (row - offset) * CELL, CELL, CELL};
-
-        SDL_SetRenderDrawColor(renderer, bColor.r, bColor.g, bColor.b, 80); // use color from piece
-        SDL_RenderFillRect(renderer, &rect);
-
-    }
-
-
-}
 
 

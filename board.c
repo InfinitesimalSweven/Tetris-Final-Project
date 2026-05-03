@@ -19,26 +19,6 @@ Board createBoard(int score, int level){
     return TetrisBoard;
 }
 
-
-void drawBoard(SDL_Renderer *renderer, Board* TetrisBoard) {
-	int offset = 20; //top 20 rows are invisible
-    for (int i = 0; i < COLS; i++) {
-        for (int j = offset; j < ROWS; j++) {
-            SDL_Rect rect = {160 + i * CELL, (j - offset) * CELL, CELL, CELL};
-
-            if (TetrisBoard->grid[i][j] > 0) {
-                Color bColor = PieceColors[TetrisBoard->grid[i][j]];
-                SDL_SetRenderDrawColor(renderer, bColor.r, bColor.g, bColor.b, 255); // use color from piece
-                SDL_RenderFillRect(renderer, &rect);
-            }
-
-            // grid lines
-            SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
-            SDL_RenderDrawRect(renderer, &rect);
-        }
-    }
-}
-
 void checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
 
     int isFull;

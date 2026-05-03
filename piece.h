@@ -31,7 +31,5 @@ int transCollision(Piece* TetrisBlock, Board* Board, int dx, int dy);
 int rotCollision(Piece* TetrisBlock, Board* Board, int drot);
 void hardDropPiece(Piece* TetrisBlock, Board* Board);
 void placePiece(Piece* TetrisBlock, Board* Board);
-void drawPiece(SDL_Renderer *renderer, Piece *TetrisBlock);
-void drawGhostPiece(SDL_Renderer *renderer, Board* Board, Piece *TetrisBlock);
 void createPieceBucket(Piece pieceBucket7[7]);
 #endif

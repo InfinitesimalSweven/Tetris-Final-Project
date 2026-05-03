@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <string.h>
 #include "board.h"
 #include "piece.h"
 #include "hold.h"
+#include "rendering.h"
 
 //https://tetris.wiki/Tetris_Guideline
 //TODO: Kyle read the guidelines for the project!
@@ -17,7 +19,7 @@ int main(){
 	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); //-1 just uses best case!
 	TTF_Init();
 	TTF_Font *font = TTF_OpenFont("PressStart2P-Regular.ttf", 24);
-	
+
 	/*if (!font) {
     printf("Font error: %s\n", TTF_GetError());
     return 1;
@@ -26,15 +28,18 @@ int main(){
 
 	int running = 1;
 	int gravTimer = 800;
+	int lockDelay = 500;
+	int lastLand = -1;
 	int lastFall = SDL_GetTicks();
 	
 	Board board = createBoard(0, 0);
 	HoldSlot hold = {.piece = createPiece(EMPTY), .heldEmpty = 1, .hasHeld = 0};
-	Piece pieceBucket[7];
-	createPieceBucket(pieceBucket);
+	Piece pieceBucketCurrent[7];
+	Piece pieceBucketNext[7];
+	createPieceBucket(pieceBucketCurrent);
+	createPieceBucket(pieceBucketNext);
 	int bucketIndex = 0;
-	Piece piece = pieceBucket[bucketIndex];	//TODO; Tommorow make Tetris bag (contains 7 pieces so you dont have repeats, this randomly defines the type of block)
-	
+	Piece piece = pieceBucketCurrent[bucketIndex];	//TODO; Tommorow make Tetris bag (contains 7 pieces so you dont have repeats, this randomly defines the type of block)
 	
 	while (running) {
 		SDL_Event event;
@@ -53,58 +58,75 @@ int main(){
 						break;
 					case SDLK_UP:
 					case SDLK_x:
-						rotCollision(&piece, &board, 1);
-						break;
+						if (rotCollision(&piece, &board, 1))
+       						lastLand = -1;
+    					break;
 					case SDLK_z:
-						rotCollision(&piece, &board, -1);
-						break;
+						if (rotCollision(&piece, &board, -1))
+       						lastLand = -1;
+    					break;
 					case SDLK_c:
 						if (hold.heldEmpty) {
-        					doHold(&piece, &hold);
-        					bucketIndex++;
-        					if (bucketIndex >= 7) {
-            					createPieceBucket(pieceBucket);
-            					bucketIndex = 0;
-        					}
-        					piece = pieceBucket[bucketIndex];
-        					hold.hasHeld = 1;
-    						} else {
-        					doHold(&piece, &hold);
-    						}
+							doHold(&piece, &hold);
+							bucketIndex++;
+							if (bucketIndex >= 7) {
+								memcpy(pieceBucketCurrent, pieceBucketNext, sizeof(pieceBucketNext));
+								createPieceBucket(pieceBucketNext);
+								bucketIndex = 0;
+							}
+							piece = pieceBucketCurrent[bucketIndex];
+							hold.hasHeld = 1;
+						} else {
+							doHold(&piece, &hold);
+						}
 						break;
 					case SDLK_SPACE:
-						hardDropPiece(&piece, &board);
-						placePiece(&piece, &board);
-						checkAndClearLine(&board, 0, ROWS - 1);
-						bucketIndex++;
-						if (bucketIndex>=7){
-							createPieceBucket(pieceBucket);
-							bucketIndex = 0;
+						if (event.key.repeat == 0) {
+							hardDropPiece(&piece, &board);
+							placePiece(&piece, &board);
+							checkAndClearLine(&board, 0, ROWS - 1);
+							bucketIndex++;
+							if (bucketIndex >= 7) {
+								memcpy(pieceBucketCurrent, pieceBucketNext, sizeof(pieceBucketNext));
+								createPieceBucket(pieceBucketNext);
+								bucketIndex = 0;
+							}
+							piece = pieceBucketCurrent[bucketIndex];
+							hold.hasHeld = 0;
 						}
-						piece = pieceBucket[bucketIndex];
-						hold.hasHeld = 0;
 						break;
 				}
 			}
 		}
-		
+
 		if (SDL_GetTicks() - lastFall > gravTimer) {
-			if(!transCollision(&piece, &board, 0, 1)){
+			transCollision(&piece, &board, 0, 1);
+			lastFall = SDL_GetTicks();
+		}
+
+		if(checkCollision(&piece, &board, 0, 1, 0)) {
+			if (lastLand == -1)
+				lastLand = SDL_GetTicks();
+			if (SDL_GetTicks() - lastLand > lockDelay){
 				placePiece(&piece, &board);
 				checkAndClearLine(&board, 0, ROWS - 1);
 				bucketIndex++;
-				if (bucketIndex >= 7) {
-					createPieceBucket(pieceBucket);
+        		if (bucketIndex >= 7) {
+					memcpy(pieceBucketCurrent, pieceBucketNext, sizeof(pieceBucketNext));
+					createPieceBucket(pieceBucketNext);
 					bucketIndex = 0;
 				}
-				piece = pieceBucket[bucketIndex];
-				hold.hasHeld = 0;
+				piece = pieceBucketCurrent[bucketIndex];
+        		hold.hasHeld = 0;
+        		lastLand = -1;
 			}
-			lastFall = SDL_GetTicks();
-			if (isGameEnd(&board)){
-				SDL_Quit();
 		}
-		}
+		else
+    		lastLand = -1;
+
+		if (isGameEnd(&board)){
+        	SDL_Quit();
+    	}
 
 		//Render
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -114,11 +136,12 @@ int main(){
 		drawBoard(renderer, &board);
 		drawGhostPiece(renderer, &board, &piece);
 		drawHold(renderer, &hold, font);
-
-
+		drawNext(renderer, font, pieceBucketCurrent, pieceBucketNext, bucketIndex);
+	
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
 	}
+
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
