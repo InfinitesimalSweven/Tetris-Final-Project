@@ -3,7 +3,7 @@ Using C, we have recreated Tetris, the #1 best selling game with 520 million sal
 
 
 ## Methods
-This project was built following the Tetris Guidelines at tetris.wiki/Tetris_Guideline
+This project was built following [The Tetris Guideline](tetris.wiki/Tetris_Guideline)
 
 ### Basics
 First, we needed to address the actual board the game is played on. To achieve this, a Board struct was created in board.h
