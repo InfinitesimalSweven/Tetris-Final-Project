@@ -7,32 +7,25 @@
 #include "hold.h"
 #include "rendering.h"
 
-//https://tetris.wiki/Tetris_Guideline
-//TODO: Kyle read the guidelines for the project!
 int const WIDTH = 640;
 int const HEIGHT = 640;
+
 int main(){
 
-    //Block initilizes the SDL engine. SDL Init says we want ot use video, then we create a centered tetris window, and render it.
-	SDL_Init(SDL_INIT_VIDEO); //SDL_Init(SDL_INIT_AUDIO); Include only if we want to code in sound
+	//Initializes SDL Engine and prepares it for display
+	SDL_Init(SDL_INIT_VIDEO);
 	SDL_Window *window = SDL_CreateWindow("Tetris", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
-	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); //-1 just uses best case!
+	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED); //-1 uses best available
 	TTF_Init();
 	TTF_Font *font = TTF_OpenFont("PressStart2P-Regular.ttf", 24);
 
-	/*if (!font) {
-    printf("Font error: %s\n", TTF_GetError());
-    return 1;
-	}*/ //font tester
-
-
+	//Initial Variables and Such
 	int running = 1;
 	int gravTimer = 800;
 	int lockDelay = 500;
 	int lastLand = -1;
 	int score = 0;
 	int lastFall = SDL_GetTicks();
-	
 	Board board = createBoard(0, 0);
 	HoldSlot hold = {.piece = createPiece(EMPTY), .heldEmpty = 1, .hasHeld = 0};
 	Piece pieceBucketCurrent[7];
@@ -40,8 +33,9 @@ int main(){
 	createPieceBucket(pieceBucketCurrent);
 	createPieceBucket(pieceBucketNext);
 	int bucketIndex = 0;
-	Piece piece = pieceBucketCurrent[bucketIndex];	//TODO; Tommorow make Tetris bag (contains 7 pieces so you dont have repeats, this randomly defines the type of block)
-	
+	Piece piece = pieceBucketCurrent[bucketIndex];
+
+	//Game Loop
 	while (running) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
@@ -108,11 +102,13 @@ int main(){
 			}
 		}
 
+		//Idle Fall Loop
 		if (SDL_GetTicks() - lastFall > gravTimer) {
 			transCollision(&piece, &board, 0, 1);
 			lastFall = SDL_GetTicks();
 		}
 
+		//Checks for piece landing
 		if(checkCollision(&piece, &board, 0, 1, 0)) {
 			if (lastLand == -1)
 				lastLand = SDL_GetTicks();
@@ -143,7 +139,8 @@ int main(){
         	SDL_Quit();
     	}
 
-		//Render
+
+		//Render New Frame
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
 
@@ -158,6 +155,7 @@ int main(){
 		SDL_Delay(16);
 	}
 
+	//Close
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();

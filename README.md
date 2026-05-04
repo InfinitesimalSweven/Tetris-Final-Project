@@ -14,7 +14,7 @@ typedef struct {
     int level;
 } Board;
 ```
-This struct contains a 2D array, where the game is actually played on. Following The Tetris Guideline, there will be 10 columns and 40 rows, with only the bottom 20 rows being displayed. The Board struct also contains a score and a level integer, which is self-explanatory but will be explained later on.  
+This struct contains a 2D array, where the game is actually played on. Following [The Tetris Guideline](https://tetris.wiki/Tetris_Guideline), there will be 10 columns and 40 rows, with only the bottom 20 rows being displayed. The Board struct also contains a score and a level integer, which is self-explanatory but will be explained later on.  
 There is a simple createBoard function that just creates a blank board.  
 ### Pieces  
 As we did with the board, we must also create a Piece struct in piece.h  
@@ -36,4 +36,9 @@ typedef enum {
     ROT_0, ROT_R, ROT_2, ROT_L
 } Rotation;
 ```
+blah blah blah
 
+
+
+### Display & Input
+As stated previously, we used Simple DirectMedia Layer 2 (SDL2) to display the game and record inputs from the player
