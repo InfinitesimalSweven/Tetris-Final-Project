@@ -1,9 +1,5 @@
-# Tetris-Final-Project
-Using C, we have recreated Tetris, the #1 best selling game with 520 million sales. To recreate Tetris, we heavily relied on
-
-
-## Methods
-This project was built following [The Tetris Guideline](https://tetris.wiki/Tetris_Guideline)
+# Tetris in C
+We have recreated Tetris, the #1 best selling video game with over 520 million sales, in C. Aside from the standard C libraries, we also used the [Simple DirectMedia Layer 2 (SDL2)](https://wiki.libsdl.org/SDL2/Introduction) library to render the game and capture inputs from the player. This project was built following the official [Tetris Guideline](https://tetris.wiki/Tetris_Guideline)
 
 ### Board
 First, we needed to address the actual board the game is played on. To achieve this, a Board struct was created in board.h
@@ -113,6 +109,12 @@ The HoldSlot struct keeps track of the held piece. In order to prevent infinite 
 
 
 ### Display & Input
-As 
-To implement the rotations found in Tetris, we could have
-1. stated previously, we used Simple DirectMedia Layer 2 (SDL2) to display the game and record inputs from the player
+As stated previously, we used Simple DirectMedia Layer 2 (SDL2) to display the game and record inputs from the player
+All the functions just render the stuff on screen. Will expand on this if Hong says so.
+
+### main.c (Game Loop etc)
+First, we initialize everything and start the game. A lot of these settings are adjustable, such as `int gravTimer` which dictates the speed at which pieces fall. The game loop is basically just checking for any inputs. If there are no inputs, it checks if the time since the last fall has exceeded that of the set `gravTimer`
+
+If so, it drops the piece by one and checks for any collisions, places piece if applicable, and clears lines if applicable. Lastly, the frames are rendered again.
+
+(Will probably expand this but I think it is good enough for now, we can just go through the code manually during presentation)
