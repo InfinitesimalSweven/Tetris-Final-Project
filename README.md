@@ -6,7 +6,7 @@ We have recreated Tetris, the #1 best selling video game with over 520 million s
 ## Method
 ### Board
 First, we needed to address the actual board the game is played on. To achieve this, a Board struct was created in board.h
-```
+```c
 typedef struct {
     int grid[COLS][ROWS];
     int score;
@@ -17,7 +17,7 @@ This struct contains a 2D array, where the game is actually played on. Following
 There is a simple createBoard function that just creates a blank board.  
 
 To clear filled lines, we have the `int checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh)` function.
-```
+```c
 int checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
 
     int isFull;
@@ -74,7 +74,7 @@ To implement this, we used an array storing integers from 1 through 7, which rep
 
 ### Pieces  
 As we did with the board, we must also create a Piece struct in piece.h  
-```
+```c
 typdef struct {
     int oriCol;
     int oriRow;
@@ -83,7 +83,7 @@ typdef struct {
 } Piece;
 ```
 Both oriCol and oriRow store the location of the piece. Instead of using an basic integer to hold rotation and blockType values, we instead defined enumerators to ease readability of the code.
-```
+```c
 typedef enum {
     EMPTY, I_BLOCK, J_BLOCK, L_BLOCK, O_BLOCK, S_BLOCK, Z_BLOCK, T_BLOCK
 } BlockType;
@@ -106,7 +106,7 @@ Following the Super Rotation System (SRS) in [The Tetris Guideline](https://tetr
 
 ### The Hold Mechanic
 To allow players to save a piece for later, we created a HoldSlot structure 
-```
+```c
 typedef struct {
     Piece piece;
     int heldEmpty;
@@ -152,6 +152,7 @@ If so, it drops the piece by one and checks for any collisions, places piece if 
     - sudo apt install libsdl2-ttf-dev
 
 ### How To Run
+```
 make  
 ./tetris  
-
+```
