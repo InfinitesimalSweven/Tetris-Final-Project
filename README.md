@@ -51,6 +51,26 @@ The function searches through the rows bottom up, stopping when there is a row t
 
 `int isGameEnd(Board* TetrisBoard){}` just checks a specific row for any filled cells. If filled, will return a 1, which prompts a game end.
 
+### The Bag
+According to the Tetris Guideline, pieces are pulled out of a bag containing 1 of each unique piece. When the bag is empty, a new bag is created and shuffled to minimize "unlucky events."
+```c
+void createPieceBucket(Piece pieceBucket7[7]) {
+    int indices[7] = {1, 2, 3, 4, 5, 6, 7};
+
+    // Implemented fisher-yates shuffle
+    for (int i = 6; i > 0; i--) {
+        int j = rand() % (i + 1);
+        int tmp = indices[i];
+        indices[i] = indices[j];
+        indices[j] = tmp;
+    }
+
+    for (int i = 0; i < 7; i++) {
+        pieceBucket7[i] = createPiece(indices[i]);
+    }
+}
+```
+To implement this, we used an array storing integers from 1 through 7, which represents each of the 7 possible pieces, and randomized the order using a fisher-yates shuffle.
 
 ### Pieces  
 As we did with the board, we must also create a Piece struct in piece.h  
