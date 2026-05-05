@@ -132,6 +132,6 @@ If so, it drops the piece by one and checks for any collisions, places piece if 
     - sudo apt install libsdl2-ttf-dev
 
 ### How To Run
-make
-./tetris
+make  
+./tetris  
 
