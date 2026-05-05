@@ -48,7 +48,10 @@ int checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
     return linesCleared;
 }
 ```
-The function searches through the rows bottom up, stopping when there is a row that is NOT filled. Then, it shifts rows down, taking the color from each cell above and putting it into the current cell. The top row is cleared with 0's and 
+The function searches through the rows bottom up, stopping when there is a row that is NOT filled. Then, it shifts rows down, taking the color from each cell above and putting it into the current cell. The top row is cleared with 0's and the row is rechecked
+
+`int isGameEnd(Board* TetrisBoard){}` just checks a specific row for any filled cells. If filled, will return a 1, which prompts a game end.
+
 
 ### Pieces  
 As we did with the board, we must also create a Piece struct in piece.h  
@@ -70,9 +73,46 @@ typedef enum {
     ROT_0, ROT_R, ROT_2, ROT_L
 } Rotation;
 ```
-blah blah blah
 
+To implement the rotations found in Tetris, we could have:
+1. Used complex math to rotate the blocks around a central centroid point.
+2. Hardcoded the exact coordinates for every piece in every possible rotation state.
+
+We chose the second option for efficiency and simplicity, which is stored in `blockOffsets.c`.
+
+Instead of actively calculating rotations, `blockOffsets.c` stores all possible states in the 4-dimensional array:
+`const int blockRotOffsets[BLOCKTYPES][ROTATIONS][BLOCKCORDS][CORDS];`
+
+Following the Super Rotation System (SRS) in [The Tetris Guideline](https://tetris.wiki/Tetris_Guideline), `blockOffsets.c` also contains the `rotTestI` and `rotTestJLSTZ` arrays. If a piece tries to rotate but hits a wall or another block, these arrays provide the 5 "wall kick" fallback tests to shift the piece slightly (up, down, left, or right).
+
+### The Hold Mechanic
+To allow players to save a piece for later, we created a HoldSlot structure 
+```
+typedef struct {
+    Piece piece;
+    int heldEmpty;
+    int hasHeld;
+} HoldSlot; 
+
+void doHold(Piece *current, HoldSlot *HeldItem){
+    if (HeldItem->hasHeld) return;
+    else if (HeldItem->heldEmpty){
+        HeldItem->piece = *current;
+        HeldItem->heldEmpty = 0;
+
+    }
+    else{
+        Piece temp = HeldItem->piece;
+        HeldItem->piece = *current;
+        *current = temp;
+    }
+    HeldItem->hasHeld = 1;
+}
+```
+The HoldSlot struct keeps track of the held piece. In order to prevent infinite swapping, it also has a hasHeld integer, which acts as a boolean and will prevent further swaps in doHold.
 
 
 ### Display & Input
-As stated previously, we used Simple DirectMedia Layer 2 (SDL2) to display the game and record inputs from the player
+As 
+To implement the rotations found in Tetris, we could have
+1. stated previously, we used Simple DirectMedia Layer 2 (SDL2) to display the game and record inputs from the player
