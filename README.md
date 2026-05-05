@@ -1,6 +1,9 @@
 # Tetris in C
 We have recreated Tetris, the #1 best selling video game with over 520 million sales, in C. Aside from the standard C libraries, we also used the [Simple DirectMedia Layer 2 (SDL2)](https://wiki.libsdl.org/SDL2/Introduction) library to render the game and capture inputs from the player. This project was built following the official [Tetris Guideline](https://tetris.wiki/Tetris_Guideline)
 
+- [Method](#Board)
+- [Installation](#Installation)
+## Method
 ### Board
 First, we needed to address the actual board the game is played on. To achieve this, a Board struct was created in board.h
 ```
@@ -118,3 +121,17 @@ First, we initialize everything and start the game. A lot of these settings are 
 If so, it drops the piece by one and checks for any collisions, places piece if applicable, and clears lines if applicable. Lastly, the frames are rendered again.
 
 (Will probably expand this but I think it is good enough for now, we can just go through the code manually during presentation)
+
+
+## Installation
+### Dependencies
+- gcc
+- [Simple DirectMedia Layer 2 (SDL2)](https://wiki.libsdl.org/SDL2/Introduction)
+    - sudo apt install libsdl2-dev
+- SDL2 TrueType Font extension
+    - sudo apt install libsdl2-ttf-dev
+
+### How To Run
+make
+./tetris
+
