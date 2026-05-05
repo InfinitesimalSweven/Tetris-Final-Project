@@ -1,9 +1,14 @@
 # Tetris in C
 We have recreated Tetris, the #1 best selling video game with over 520 million sales, in C. Aside from the standard C libraries, we also used the [Simple DirectMedia Layer 2 (SDL2)](https://wiki.libsdl.org/SDL2/Introduction) library to render the game and capture inputs from the player. This project was built following the official [Tetris Guideline](https://tetris.wiki/Tetris_Guideline)
-
+- [Features](#Features)
 - [Method](#Board)
-- [Installation](#Installation)
+- [Setup](#Setup)
+
+## Features
+- It's Tetris.
+
 ## Method
+This section will explain the code.
 ### Board
 First, we needed to address the actual board the game is played on. To achieve this, a Board struct was created in board.h
 ```c
@@ -133,7 +138,7 @@ The HoldSlot struct keeps track of the held piece. In order to prevent infinite 
 
 ### Display & Input
 As stated previously, we used Simple DirectMedia Layer 2 (SDL2) to display the game and record inputs from the player
-All the functions just render the stuff on screen. Will expand on this if Hong says so.
+All the functions just render the stuff on screen. Will expand later but it is literally all just "draw this. boom. draw that. boom. now show it. boom."
 
 ### main.c (Game Loop etc)
 First, we initialize everything and start the game. A lot of these settings are adjustable, such as `int gravTimer` which dictates the speed at which pieces fall. The game loop is basically just checking for any inputs. If there are no inputs, it checks if the time since the last fall has exceeded that of the set `gravTimer`
@@ -143,12 +148,12 @@ If so, it drops the piece by one and checks for any collisions, places piece if 
 (Will probably expand this but I think it is good enough for now, we can just go through the code manually during presentation)
 
 
-## Installation
+## Setup
 ### Dependencies
 - gcc
 - [Simple DirectMedia Layer 2 (SDL2)](https://wiki.libsdl.org/SDL2/Introduction)
     - sudo apt install libsdl2-dev
-- SDL2 TrueType Font extension
+- [SDL2 TrueType Font extension](https://wiki.libsdl.org/SDL2_ttf)
     - sudo apt install libsdl2-ttf-dev
 
 ### How To Run
