@@ -153,3 +153,26 @@ void drawScore(SDL_Renderer *renderer, TTF_Font *font, int score){
     SDL_Rect scoreRect = {10, 60 + 3*CELL + 10 + 24 + 5, w_2/2, h_2/2};
     SDL_RenderCopy(renderer, scoreTexture, NULL, &scoreRect);
 }
+
+
+void drawLevel(SDL_Renderer *renderer, TTF_Font *font, int level){
+    SDL_Color white = {255, 255, 255};
+    SDL_Surface *levelTextSurface = TTF_RenderText_Solid(font, "LEVEL", white);
+    SDL_Texture *levelTextTexture = SDL_CreateTextureFromSurface(renderer, levelTextSurface);
+    SDL_FreeSurface(levelTextSurface);
+    int w, h;
+    TTF_SizeText(font, "LEVEL", &w, &h);
+    SDL_Rect labelRect = {10, 60 + 3*CELL + 50 + 100, w, h};
+    SDL_RenderCopy(renderer, levelTextTexture, NULL, &labelRect);
+
+    char levelStr[20];
+    snprintf(levelStr, sizeof(levelStr), "%d", level);
+
+    SDL_Surface *levelSurface = TTF_RenderText_Solid(font, levelStr, white);
+    SDL_Texture *levelTexture = SDL_CreateTextureFromSurface(renderer, levelSurface);
+    SDL_FreeSurface(levelSurface);
+    int w_2, h_2;
+    TTF_SizeText(font, levelStr, &w_2, &h_2);
+    SDL_Rect levelRect = {10, 60 + 3*CELL + 50 + 100 + 24 + 5, w_2/2, h_2/2};
+    SDL_RenderCopy(renderer, levelTexture, NULL, &levelRect);
+}

@@ -25,6 +25,8 @@ int main(){
 	int lockDelay = 500;
 	int lastLand = -1;
 	int score = 0;
+	int level = 1;
+	int totalLinesCleared = 0;
 	int lastFall = SDL_GetTicks();
 	Board board = createBoard(0, 0);
 	HoldSlot hold = {.piece = createPiece(EMPTY), .heldEmpty = 1, .hasHeld = 0};
@@ -50,7 +52,7 @@ int main(){
 						break;
 					case SDLK_DOWN:
 						if (transCollision(&piece, &board, 0, 1))
-        					score += 1;
+        					score += 1*level;
     					break;
 					case SDLK_UP:
 					case SDLK_x:
@@ -82,13 +84,14 @@ int main(){
 							placePiece(&piece, &board);
 							int linesCleared = checkAndClearLine(&board, 0, ROWS - 1);
 							switch (linesCleared) {
-								case 1: score += 100; break;
-								case 2: score += 300; break;
-								case 3: score += 500; break;
-								case 4: score += 800; break;
+								case 1: score += 100*level; break;
+								case 2: score += 300*level; break;
+								case 3: score += 500*level; break;
+								case 4: score += 800*level; break;
 							}
+							totalLinesCleared += linesCleared;
 							bucketIndex++;
-							score += 2 * cellsDropped;
+							score += 2 * cellsDropped * level;
 							if (bucketIndex >= 7) {
 								memcpy(pieceBucketCurrent, pieceBucketNext, sizeof(pieceBucketNext));
 								createPieceBucket(pieceBucketNext);
@@ -116,11 +119,12 @@ int main(){
 				placePiece(&piece, &board);
 				int linesCleared = checkAndClearLine(&board, 0, ROWS - 1);
 				switch (linesCleared) {
-					case 1: score += 100; break;
-					case 2: score += 300; break;
-					case 3: score += 500; break;
-					case 4: score += 800; break;
+					case 1: score += 100*level; break;
+					case 2: score += 300*level; break;
+					case 3: score += 500*level; break;
+					case 4: score += 800*level; break;
 				}
+				totalLinesCleared += linesCleared;
 				bucketIndex++;
         		if (bucketIndex >= 7) {
 					memcpy(pieceBucketCurrent, pieceBucketNext, sizeof(pieceBucketNext));
@@ -136,10 +140,11 @@ int main(){
     		lastLand = -1;
 
 		if (isGameEnd(&board)){
-        	SDL_Quit();
+        	running = 0;
     	}
 
-
+		level = totalLinesCleared / 10 + 1;
+		gravTimer = 800 - (level - 1) * 75;
 		//Render New Frame
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
@@ -150,6 +155,7 @@ int main(){
 		drawHold(renderer, &hold, font);
 		drawNext(renderer, font, pieceBucketCurrent, pieceBucketNext, bucketIndex);
 		drawScore(renderer, font, score);
+		drawLevel(renderer, font, level);
 	
 		SDL_RenderPresent(renderer);
 		SDL_Delay(16);
