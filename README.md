@@ -21,7 +21,7 @@ typedef struct {
 This struct contains a 2D array, where the game is actually played on. Following [The Tetris Guideline](https://tetris.wiki/Tetris_Guideline), there will be 10 columns and 40 rows, with only the bottom 20 rows being displayed. The Board struct also contains a score and a level integer, which is self-explanatory but will be explained later on.  
 There is a simple createBoard function that just creates a blank board.  
 
-To clear filled lines, we have the `int checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh)` function.
+To clear filled lines, we have the `checkAndClearLine` function.
 ```c
 int checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
 
@@ -54,7 +54,7 @@ int checkAndClearLine(Board* TetrisBoard, int yLow, int yHigh){
 ```
 The function searches through the rows bottom up, stopping when there is a row that is NOT filled. Then, it shifts rows down, taking the color from each cell above and putting it into the current cell. The top row is cleared with 0's and the row is rechecked
 
-`int isGameEnd(Board* TetrisBoard){}` just checks a specific row for any filled cells. If filled, will return a 1, which prompts a game end.
+The `isGameEnd` function just checks a specific row for any filled cells. If filled, will return a 1, which prompts a game end.
 
 ### The Bag
 According to the Tetris Guideline, pieces are pulled out of a bag containing 1 of each unique piece. When the bag is empty, a new bag is created and shuffled to minimize "unlucky events."
@@ -78,7 +78,7 @@ void createPieceBucket(Piece pieceBucket7[7]) {
 To implement this, we used an array storing integers from 1 through 7, which represents each of the 7 possible pieces, and randomized the order using a fisher-yates shuffle.
 
 ### Pieces  
-As we did with the board, we must also create a Piece struct in piece.h  
+As we did with the board, we must also create a Piece struct in `piece.h`  
 ```c
 typdef struct {
     int oriCol;
@@ -87,7 +87,7 @@ typdef struct {
     Blocktype blockType;
 } Piece;
 ```
-Both oriCol and oriRow store the location of the piece. Instead of using an basic integer to hold rotation and blockType values, we instead defined enumerators to ease readability of the code.
+Both `oriCol` and `oriRow` store the location of the piece. Instead of using an basic integer to hold rotation and blockType values, we instead defined enumerators to ease readability of the code.
 ```c
 typedef enum {
     EMPTY, I_BLOCK, J_BLOCK, L_BLOCK, O_BLOCK, S_BLOCK, Z_BLOCK, T_BLOCK
@@ -138,15 +138,10 @@ The HoldSlot struct keeps track of the held piece. In order to prevent infinite 
 
 ### Display & Input
 As stated previously, we used Simple DirectMedia Layer 2 (SDL2) to display the game and record inputs from the player
-All the functions just render the stuff on screen. Will expand later but it is literally all just "draw this. boom. draw that. boom. now show it. boom."
+All the functions just render the stuff on screen. Most of it is just knowing what the functions do, so I won't explain it further.
 
 ### main.c (Game Loop etc)
-First, we initialize everything and start the game. A lot of these settings are adjustable, such as `int gravTimer` which dictates the speed at which pieces fall. The game loop is basically just checking for any inputs. If there are no inputs, it checks if the time since the last fall has exceeded that of the set `gravTimer`
-
-If so, it drops the piece by one and checks for any collisions, places piece if applicable, and clears lines if applicable. Lastly, the frames are rendered again.
-
-(Will probably expand this but I think it is good enough for now, we can just go through the code manually during presentation)
-
+First, we initialize everything and start the game. A lot of these settings are adjustable, such as `int gravTimer` which dictates the speed at which pieces fall. The game loop is basically just checking for any inputs. If there are no inputs, it checks if the time since the last fall has exceeded that of the set `gravTimer`. If so, it drops the piece by one and checks for any collisions, places piece if applicable, and clears lines if applicable. Lastly, the frames are rendered again.
 
 ## Setup
 ### Dependencies
