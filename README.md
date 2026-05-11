@@ -10,7 +10,7 @@ We have recreated Tetris, the #1 best selling video game with over 520 million s
 ## Method
 This section will explain the code.
 ### Board
-First, we needed to address the actual board the game is played on. To achieve this, a Board struct was created in board.h
+First, we needed to address the actual board the game is played on. To achieve this, a Board struct was created in `board.h`
 ```c
 typedef struct {
     int grid[COLS][ROWS];
@@ -80,7 +80,7 @@ To implement this, we used an array storing integers from 1 through 7, which rep
 ### Pieces  
 As we did with the board, we must also create a Piece struct in `piece.h`  
 ```c
-typdef struct {
+typedef struct {
     int oriCol;
     int oriRow;
     Rotation rotation;
